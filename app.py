@@ -3,7 +3,7 @@ import google.generativeai as genai
 
 # API 키 설정 (Secrets에서 가져오기)
 if "GEMINI_API_KEY" in st.secrets:
-    genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
+    genai.configure(api_key="AIzaSyD3HYCDN58Aet5q0PlgoxmzyP8yigeRFXk")
 else:
     st.error("API 키가 없습니다.")
     st.stop()
