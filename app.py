@@ -75,7 +75,7 @@ system_instruction = f"""
 # 모델 초기화
 try:
     model = genai.GenerativeModel(
-        model_name="gemini-1.5-flash", 
+        model_name="gemini-2.5-flash", 
         system_instruction=system_instruction
     )
 except Exception as e:
