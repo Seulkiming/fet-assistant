@@ -96,7 +96,7 @@ if prompt := st.chat_input("질문을 입력하세요"):
         st.write(prompt)
 
     with st.chat_message("assistant"):
-        with st.spinner("규정 확인 중..."):
+        with st.spinner("조금만 기다려주세용..."):
             try:
                 # [핵심 수정] 대화 기록 구성 시 첫 인사(assistant) 제거
                 chat_history = []
