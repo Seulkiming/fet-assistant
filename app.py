@@ -96,4 +96,25 @@ if prompt := st.chat_input("질문을 입력하세요"):
     with st.chat_message("user"):
         st.write(prompt)
 
-    with st.
+    with st.chat_message("assistant"):
+        with st.spinner("규정 확인 중..."):
+            try:
+                # [핵심 수정] 대화 기록 구성 시 첫 인사(assistant) 제거
+                chat_history = []
+                for msg in st.session_state.messages:
+                    # 첫 인사는 건너뛰고, 실제 대화만 API로 보냄
+                    if msg["content"] == "안녕하세요! FET 운영팀 챗봇입니다. 무엇을 도와드릴까요? (팀전 규정, 환불, 담당자 문의 등)":
+                        continue
+                        
+                    if msg["role"] == "user":
+                        chat_history.append({"role": "user", "parts": [msg["content"]]})
+                    elif msg["role"] == "assistant":
+                        chat_history.append({"role": "model", "parts": [msg["content"]]})
+                
+                response = model.generate_content(chat_history)
+                st.write(response.text)
+                st.session_state.messages.append({"role": "assistant", "content": response.text})
+            
+            except Exception as e:
+                # 에러가 나면 빨간 글씨로 확실히 보여줌
+                st.error(f"오류가 발생했습니다: {e}")
