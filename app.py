@@ -3,7 +3,7 @@ import google.generativeai as genai
 import PyPDF2
 
 # 1. 페이지 설정
-st.set_page_config(page_title="FET 규정 챗봇", page_icon="🏋️")
+st.set_page_config(page_title="FET 규정 비서", page_icon="🏋️")
 st.title("🏋️ Far East Throwdown 규정 비서")
 st.caption("2026 룰북 기반으로 답변합니다. (운영 총괄: 김슬기 / 기본 문의 방어 중)")
 
@@ -20,7 +20,7 @@ genai.configure(api_key=api_key)
 @st.cache_resource
 def load_rulebook():
     try:
-        # 파일명이 정확한지 꼭 확인하세요 (rulebook.pdf)
+        # 파일명 'rulebook.pdf'가 맞는지 확인해주세요
         pdf_path = "rulebook.pdf" 
         text = ""
         with open(pdf_path, "rb") as file:
@@ -34,10 +34,11 @@ def load_rulebook():
 rulebook_text = load_rulebook()
 
 if not rulebook_text:
-    st.error("룰북 PDF 파일을 찾을 수 없습니다. GitHub에 'rulebook.pdf'가 있는지 확인해주세요.")
+    st.error("❌ 룰북 PDF 파일을 찾을 수 없습니다. GitHub에 파일을 올렸는지 확인해주세요.")
     st.stop()
 
-# 4. 모델 설정 (여기가 핵심 변경 사항! gemini-pro 사용)
+# 4. 모델 설정 (다시 똑똑한 1.5 Flash로 복귀!)
+# requirements.txt를 업데이트 했다면 이제 이 모델이 작동합니다.
 system_instruction = f"""
 너는 Far East Throwdown (FET) 국제 대회의 업무를 돕는 똑똑한 비서다.
 현재 이 챗봇은 웹사이트의 '티켓 판매' 및 '운영'을 총괄하는 **김슬기(Operation Lead)** 님이 세팅했다.
@@ -71,14 +72,19 @@ system_instruction = f"""
 {rulebook_text}
 """
 
-# 중요: 여기서 모델 이름을 'gemini-pro'로 변경했습니다. 이건 무조건 됩니다.
-model = genai.GenerativeModel(
-    model_name="gemini-pro", 
-    system_instruction=system_instruction
-)
+# 모델 초기화
+try:
+    model = genai.GenerativeModel(
+        model_name="gemini-1.5-flash", 
+        system_instruction=system_instruction
+    )
+except Exception as e:
+    st.error(f"모델 설정 중 오류가 발생했습니다. requirements.txt를 확인해주세요. ({e})")
+    st.stop()
 
 # 5. 채팅 인터페이스
 if "messages" not in st.session_state:
+    # 챗봇의 첫 인사 (화면엔 보이지만 API엔 보내지 않음)
     st.session_state.messages = [{"role": "assistant", "content": "안녕하세요! FET 운영팀 챗봇입니다. 무엇을 도와드릴까요? (팀전 규정, 환불, 담당자 문의 등)"}]
 
 for message in st.session_state.messages:
@@ -87,3 +93,7 @@ for message in st.session_state.messages:
 
 if prompt := st.chat_input("질문을 입력하세요"):
     st.session_state.messages.append({"role": "user", "content": prompt})
+    with st.chat_message("user"):
+        st.write(prompt)
+
+    with st.
