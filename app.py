@@ -11,7 +11,7 @@ st.caption("문제가 발생하면 슭쌤에게 문의하세요.")
 # 실제 배포시에는 Streamlit Secrets 기능을 사용하는 것이 좋으나, 
 # 편의상 코드 내 혹은 환경변수로 처리하거나, 지금은 입력창을 숨기고 Secrets에서 가져오도록 설정합니다.
 if "GEMINI_API_KEY" in st.secrets:
-    api_key = "gen-lang-client-0333865038"
+    api_key = "AIzaSyD3HYCDN58Aet5q0PlgoxmzyP8yigeRFXk"
     genai.configure(api_key=api_key)
 else:
     st.error("설정 파일(Secrets)에 API 키가 없습니다. 배포자에게 문의하세요.")
