@@ -57,7 +57,7 @@ system_instruction = f"""
 """
 
 model = genai.GenerativeModel(
-    model_name="gemini-1.5-flash", # 무료 티어에서 빠르고 성능 좋음
+    model_name="gemini-1.5-flash-002", # 무료 티어에서 빠르고 성능 좋음
     system_instruction=system_instruction
 )
 
