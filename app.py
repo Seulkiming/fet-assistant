@@ -74,7 +74,10 @@ system_instruction = f"""
 
 # 모델 초기화
 try:
-    model = genai.GenerativeModel("gemini-pro")
+    model = genai.GenerativeModel(
+        model_name = "gemini-2.5-flash",
+        system_instruction=system_instruction
+        )
 except Exception as e:
     st.error(f"모델 설정 중 오류가 발생했습니다. requirements.txt를 확인해주세요. ({e})")
     st.stop()
