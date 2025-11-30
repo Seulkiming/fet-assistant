@@ -16,25 +16,30 @@ else:
 
 genai.configure(api_key=api_key)
 
-# 3. 룰북 PDF 텍스트 추출 함수
+# 3. PDF 텍스트 추출 함수
 @st.cache_resource
-def load_rulebook():
+def load_pdf_text(pdf_path: str):
     try:
-        # 룰북 파일명의 버전을 꼭 체크하세요
-        pdf_path = "rulebook.pdf"
         text = ""
         with open(pdf_path, "rb") as file:
             reader = PyPDF2.PdfReader(file)
             for page in reader.pages:
-                text += page.extract_text() + "\n"
-        return text
+                text += (page.extract_text() or "") + "\n"
+        return text if text.strip() else None
     except FileNotFoundError:
         return None
 
-rulebook_text = load_rulebook()
+rulebook_text = load_pdf_text("rulebook.pdf")
+cs_guide_text = load_pdf_text("cs_guide_ver1.pdf")
 
+missing_files = []
 if not rulebook_text:
-    st.error("❌ 룰북 PDF 파일을 찾을 수 없습니다. GitHub에 파일을 올렸는지 확인해주세요.")
+    missing_files.append("rulebook.pdf")
+if not cs_guide_text:
+    missing_files.append("cs_guide_ver1.pdf")
+
+if missing_files:
+    st.error(f"❌ 다음 PDF 파일을 찾을 수 없습니다: {', '.join(missing_files)}. GitHub에 파일을 올렸는지 확인해주세요.")
     st.stop()
 
 # 4. 모델 설정
@@ -69,6 +74,9 @@ system_instruction = f"""
 
 [룰북 내용]
 {rulebook_text}
+
+[CS 가이드]
+{cs_guide_text}
 """
 
 # 모델 초기화
