@@ -157,6 +157,10 @@ except Exception as e:
 if "messages" not in st.session_state:
     # 챗봇의 첫 인사 (화면엔 보이지만 API엔 보내지 않음)
     st.session_state.messages = [{"role": "assistant", "content": "안녕하세요! 오늘도 FET 업무를 위해 노력해주셔서 감사해요. 궁금한걸 적어주세요."}]
+    st.session_state.show_examples = True
+else:
+    # 입력이 한 번이라도 있으면 예시 질문 숨김
+    st.session_state.show_examples = st.session_state.get("show_examples", False)
 
 # 내부 문서 노출 방지용 필터
 SENSITIVE_PATTERNS = [
@@ -172,6 +176,14 @@ def is_requesting_internal_doc(text: str) -> bool:
     return any(re.search(pat, text, flags=re.IGNORECASE) for pat in SENSITIVE_PATTERNS)
 
 
+EXAMPLE_QUESTIONS = [
+    "FEL 디비전에서 나이 기준이 어떻게 되더라?",
+    "관람권 환불 요청이 있는데 어떻게 해야해?",
+    "자원봉사자 보급품 뭐 주기로 했었지?",
+    "FEC 예선 시작이 언제더라?",
+]
+
+
 context_block = f"""
 [참고 자료]
 [룰북]
@@ -185,7 +197,24 @@ for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.write(message["content"])
 
-if prompt := st.chat_input("질문을 입력하세요"):
+# 예시 질문 카드 (첫 진입 시만)
+if st.session_state.show_examples and len(st.session_state.messages) == 1:
+    st.markdown("###### 바로 물어볼 수 있는 예시 질문")
+    cols = st.columns(2)
+    for idx, q in enumerate(EXAMPLE_QUESTIONS):
+        col = cols[idx % 2]
+        if col.button(q, key=f"example_{idx}"):
+            st.session_state.example_prompt = q
+            st.session_state.show_examples = False
+            st.experimental_rerun()
+
+# 버튼 클릭으로 전달된 프롬프트 우선 사용
+prompt = st.session_state.pop("example_prompt", None)
+if prompt is None:
+    prompt = st.chat_input("질문을 입력하세요", key="chat_input")
+
+if prompt:
+    st.session_state.show_examples = False
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.write(prompt)
