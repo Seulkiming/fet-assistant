@@ -50,6 +50,9 @@ st.markdown(
 [data-testid="stChatMessage"] p {{
   color: var(--fet-text);
 }}
+[data-testid="stChatMessageAvatarAssistant"] {{
+  background: #ffffff;
+}}
 [data-testid="stChatInput"] > div {{
   background: var(--fet-card);
   border: 1px solid var(--fet-border);
