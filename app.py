@@ -198,23 +198,28 @@ for message in st.session_state.messages:
         st.write(message["content"])
 
 # 예시 질문 카드 (첫 진입 시만)
+examples_placeholder = st.empty()
+selected_prompt = None
 if st.session_state.show_examples and len(st.session_state.messages) == 1:
-    st.markdown("###### 바로 물어볼 수 있는 예시 질문")
-    cols = st.columns(2)
-    selected_prompt = None
-    for idx, q in enumerate(EXAMPLE_QUESTIONS):
-        col = cols[idx % 2]
-        if col.button(q, key=f"example_{idx}"):
-            selected_prompt = q
-            st.session_state.show_examples = False
+    with examples_placeholder.container():
+        st.markdown("###### 바로 물어볼 수 있는 예시 질문")
+        cols = st.columns(2)
+        for idx, q in enumerate(EXAMPLE_QUESTIONS):
+            col = cols[idx % 2]
+            if col.button(q, key=f"example_{idx}"):
+                selected_prompt = q
+                st.session_state.show_examples = False
+else:
+    examples_placeholder.empty()
 
 # 버튼 클릭 시 선택된 예시 질문을 바로 사용, 아니면 입력값 사용
-prompt = selected_prompt if 'selected_prompt' in locals() and selected_prompt else None
+prompt = selected_prompt if selected_prompt else None
 if prompt is None:
     prompt = st.chat_input("질문을 입력하세요", key="chat_input")
 
 if prompt:
     st.session_state.show_examples = False
+    examples_placeholder.empty()
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.write(prompt)
