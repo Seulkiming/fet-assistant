@@ -2,9 +2,13 @@ import streamlit as st
 import google.generativeai as genai
 import PyPDF2
 import re
+from pathlib import Path
 
 # 1. 페이지 설정
 st.set_page_config(page_title="TEAM FET ASISSTANT", page_icon="🤖")
+logo_path = Path("fet_logo_2026.png")
+if logo_path.exists():
+    st.image(str(logo_path), width=180)
 st.title("TEAM FET 의 업무를 돕는 AI")
 st.caption("FET 관련한 중요한 내용, 실시간으로 변동되는 내용을 학습하고 있습니다." + "업무 중 모르는 것이 생겼거나, 헷갈리는 것이 있다면 제게 질문해주세요. (문의: 김슬기)")
 
