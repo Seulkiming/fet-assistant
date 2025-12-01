@@ -8,6 +8,71 @@ st.set_page_config(page_title="TEAM FET ASISSTANT", page_icon="🤖")
 st.title("TEAM FET 의 업무를 돕는 AI")
 st.caption("FET 관련한 중요한 내용, 실시간으로 변동되는 내용을 학습하고 있습니다." + "업무 중 모르는 것이 생겼거나, 헷갈리는 것이 있다면 제게 질문해주세요. (문의: 김슬기)")
 
+# FET 테마 색상 적용
+PRIMARY_COLOR = "#0058a5"  # R0 G88 B165
+ACCENT_COLOR = "#3f9bff"
+BG_COLOR = "#0b1624"
+CARD_COLOR = "#12263c"
+TEXT_COLOR = "#f4f7fb"
+MUTED_TEXT_COLOR = "#c7d3e1"
+BORDER_COLOR = "#1f3a56"
+
+st.markdown(
+    f"""
+<style>
+:root {{
+  --fet-primary: {PRIMARY_COLOR};
+  --fet-accent: {ACCENT_COLOR};
+  --fet-bg: {BG_COLOR};
+  --fet-card: {CARD_COLOR};
+  --fet-text: {TEXT_COLOR};
+  --fet-muted: {MUTED_TEXT_COLOR};
+  --fet-border: {BORDER_COLOR};
+}}
+.stApp {{
+  background: var(--fet-bg);
+  color: var(--fet-text);
+  font-family: 'Helvetica Neue', 'Segoe UI', sans-serif;
+}}
+[data-testid="stHeader"] {{
+  background: transparent;
+}}
+.block-container {{
+  padding-top: 2.5rem;
+}}
+[data-testid="stChatMessage"] {{
+  background: var(--fet-card);
+  border: 1px solid var(--fet-border);
+  border-radius: 14px;
+  padding: 14px;
+  color: var(--fet-text);
+}}
+[data-testid="stChatMessage"] p {{
+  color: var(--fet-text);
+}}
+[data-testid="stChatInput"] > div {{
+  background: var(--fet-card);
+  border: 1px solid var(--fet-border);
+  border-radius: 12px;
+}}
+[data-testid="stChatInput"] textarea {{
+  color: var(--fet-text);
+  background: var(--fet-card);
+}}
+.stButton>button {{
+  background: var(--fet-primary);
+  color: var(--fet-text);
+  border: 1px solid var(--fet-border);
+  border-radius: 10px;
+}}
+a {{
+  color: var(--fet-accent);
+}}
+</style>
+""",
+    unsafe_allow_html=True,
+)
+
 # 2. API 키 설정. API 키를 코드에 직접 적지 말고, secrets에서 가져오도록 복구합니다.
 if "GEMINI_API_KEY" in st.secrets:
     api_key = st.secrets["GEMINI_API_KEY"]
