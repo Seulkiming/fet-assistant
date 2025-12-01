@@ -212,10 +212,9 @@ if st.session_state.show_examples and len(st.session_state.messages) == 1:
 else:
     examples_placeholder.empty()
 
-# 버튼 클릭 시 선택된 예시 질문을 바로 사용, 아니면 입력값 사용
-prompt = selected_prompt if selected_prompt else None
-if prompt is None:
-    prompt = st.chat_input("질문을 입력하세요", key="chat_input")
+# 입력창은 항상 렌더링하고, 선택된 예시가 있으면 그것을 우선 사용
+user_input = st.chat_input("질문을 입력하세요", key="chat_input")
+prompt = selected_prompt or user_input
 
 if prompt:
     st.session_state.show_examples = False
