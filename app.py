@@ -201,15 +201,15 @@ for message in st.session_state.messages:
 if st.session_state.show_examples and len(st.session_state.messages) == 1:
     st.markdown("###### 바로 물어볼 수 있는 예시 질문")
     cols = st.columns(2)
+    selected_prompt = None
     for idx, q in enumerate(EXAMPLE_QUESTIONS):
         col = cols[idx % 2]
         if col.button(q, key=f"example_{idx}"):
-            st.session_state.example_prompt = q
+            selected_prompt = q
             st.session_state.show_examples = False
-            st.experimental_rerun()
 
-# 버튼 클릭으로 전달된 프롬프트 우선 사용
-prompt = st.session_state.pop("example_prompt", None)
+# 버튼 클릭 시 선택된 예시 질문을 바로 사용, 아니면 입력값 사용
+prompt = selected_prompt if 'selected_prompt' in locals() and selected_prompt else None
 if prompt is None:
     prompt = st.chat_input("질문을 입력하세요", key="chat_input")
 
