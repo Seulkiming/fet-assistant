@@ -2,11 +2,67 @@ import streamlit as st
 import google.generativeai as genai
 import PyPDF2
 import re
+import time
 
 # 1. 페이지 설정
 st.set_page_config(page_title="FET Rulebook Assistant", page_icon="🤖")
 st.title("FET Rulebook Assistant")
 st.caption("I'm learning the FET Rulebook. Ask me anything about the rules!")
+
+# Splash Screen (Intro Animation)
+if "first_load" not in st.session_state:
+    st.session_state.first_load = True
+
+if st.session_state.first_load:
+    # Full screen overlay + Animation
+    st.markdown(
+        """
+        <style>
+        .splash-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #0b1624; /* FET Background Color */
+            z-index: 999999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #f4f7fb;
+        }
+        .splash-logo {
+            font-size: 3rem;
+            font-weight: bold;
+            animation: fadeInScale 1.5s ease-out forwards;
+        }
+        .splash-sub {
+            font-size: 1.5rem;
+            margin-top: 20px;
+            color: #3f9bff;
+            opacity: 0;
+            animation: fadeIn 1s ease-out 0.8s forwards;
+        }
+        @keyframes fadeInScale {
+            0% { opacity: 0; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        </style>
+        <div class="splash-container">
+            <div class="splash-logo">2026 Far East Throwdown</div>
+            <div class="splash-sub">Ask anything about the Rulebook!</div>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+    time.sleep(2.5)  # Show splash for 2.5 seconds
+    st.session_state.first_load = False
+    st.rerun()
 
 # FET 테마 색상 적용
 PRIMARY_COLOR = "#0058a5"  # R0 G88 B165
