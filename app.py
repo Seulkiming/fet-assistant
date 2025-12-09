@@ -7,7 +7,7 @@ import time
 # 1. 페이지 설정
 st.set_page_config(page_title="FET Rulebook Assistant", page_icon="🤖")
 st.title("FET Rulebook Assistant")
-st.caption("I'm learning the FET Rulebook. Ask me anything about the rules!")
+st.caption("I'm learning the FET Rulebook. Ask me anything about the rules! (한국어로도 질문 가능합니다 😊)")
 
 # Splash Screen (Intro Animation)
 if "first_load" not in st.session_state:
