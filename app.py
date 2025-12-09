@@ -99,13 +99,12 @@ def load_pdf_text(pdf_path: str):
         return None
 
 rulebook_text = load_pdf_text("rulebook.pdf")
-cs_guide_text = load_pdf_text("cs_guide_ver1.pdf")
+
 
 missing_files = []
 if not rulebook_text:
     missing_files.append("rulebook.pdf")
-if not cs_guide_text:
-    missing_files.append("cs_guide_ver1.pdf")
+
 
 if missing_files:
     st.error(f"❌ 다음 PDF 파일을 찾을 수 없습니다: {', '.join(missing_files)}. GitHub에 파일을 올렸는지 확인해주세요.")
@@ -192,8 +191,6 @@ context_block = f"""
 [룰북]
 {rulebook_text}
 
-[CS 가이드]
-{cs_guide_text}
 """
 
 for message in st.session_state.messages:
