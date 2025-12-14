@@ -142,6 +142,7 @@ else:
 genai.configure(api_key=api_key)
 
 # 3. PDF 텍스트 추출 함수
+RULEBOOK_FILE = "2026_Far_East_Throwdown_ver1.5.pdf"
 @st.cache_resource
 def load_pdf_text(pdf_path: str):
     try:
@@ -154,12 +155,12 @@ def load_pdf_text(pdf_path: str):
     except FileNotFoundError:
         return None
 
-rulebook_text = load_pdf_text("rulebook.pdf")
+rulebook_text = load_pdf_text(RULEBOOK_FILE)
 
 
 missing_files = []
 if not rulebook_text:
-    missing_files.append("rulebook.pdf")
+    missing_files.append(RULEBOOK_FILE)
 
 
 if missing_files:
