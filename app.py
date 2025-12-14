@@ -142,7 +142,7 @@ else:
 genai.configure(api_key=api_key)
 
 # 3. PDF 텍스트 추출 함수
-RULEBOOK_FILE = "2026_Far_East_Throwdown_ver1.5.pdf"
+RULEBOOK_FILE = "rulebook_251215.pdf"
 @st.cache_resource
 def load_pdf_text(pdf_path: str):
     try:
